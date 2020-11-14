@@ -9,6 +9,8 @@
 [Rr]elease/
 [Bb]in/
 [Oo]bj/
+.intermediate/
+.out/
 
 # Visual Studio cache/options
 .vs/

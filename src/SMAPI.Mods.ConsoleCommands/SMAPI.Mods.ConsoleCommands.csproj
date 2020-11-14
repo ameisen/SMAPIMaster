@@ -1,10 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\SMAPI.Props.csproj" />
+	<Import Project="..\XNA.Props.csproj" />
+
   <PropertyGroup>
     <AssemblyName>ConsoleCommands</AssemblyName>
     <RootNamespace>StardewModdingAPI.Mods.ConsoleCommands</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <PlatformTarget>x86</PlatformTarget>
+		<TargetFramework>$(LibraryFramework)</TargetFramework>
+		<PlatformTarget>$(GameTarget)</PlatformTarget>
+		
+		<OutputPath>$(OutRootDir)$(MSBuildProjectName)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,30 +20,13 @@
     <Reference Include="StardewValley.GameData" HintPath="$(GamePath)\StardewValley.GameData.dll" Private="False" />
   </ItemGroup>
 
-  <Choose>
-    <!-- Windows -->
-    <When Condition="$(OS) == 'Windows_NT'">
-      <ItemGroup>
-        <Reference Include="Netcode" HintPath="$(GamePath)\Netcode.dll" Private="False" />
-        <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" Private="False" />
-        <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" Private="False" />
-        <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" Private="False" />
-        <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" Private="False" />
-      </ItemGroup>
-    </When>
-
-    <!-- Linux/Mac -->
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="MonoGame.Framework" HintPath="$(GamePath)\MonoGame.Framework.dll" Private="False" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+  <ItemGroup Condition="$(OS) == 'Windows_NT'">
+    <Reference Include="Netcode" HintPath="$(GamePath)\Netcode.dll" Private="False" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Update="manifest.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
-  <Import Project="..\SMAPI.Internal\SMAPI.Internal.projitems" Label="Shared" />
   <Import Project="..\..\build\common.targets" />
 </Project>

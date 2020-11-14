@@ -1,0 +1,5 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<BaseIntermediateOutputPath>$(SolutionDir)..\.intermediate\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+	</PropertyGroup>
+</Project>

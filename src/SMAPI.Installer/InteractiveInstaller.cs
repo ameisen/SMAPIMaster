@@ -590,8 +590,10 @@ namespace StardewModdingApi.Installer
             switch (platform)
             {
                 case Platform.Windows:
+#pragma warning disable CA1416 // Validate platform compatibility
                     using (RegistryKey versionKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full"))
                         return versionKey?.GetValue("Release") != null; // .NET Framework 4.5+
+#pragma warning restore CA1416 // Validate platform compatibility
 
                 default:
                     throw new NotSupportedException("The installed .NET Framework version can only be checked on Windows.");
@@ -606,8 +608,10 @@ namespace StardewModdingApi.Installer
             switch (platform)
             {
                 case Platform.Windows:
+#pragma warning disable CA1416 // Validate platform compatibility
                     using (RegistryKey key = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey(@"SOFTWARE\Microsoft\XNA\Framework"))
                         return key != null; // XNA Framework 4.0+
+#pragma warning restore CA1416 // Validate platform compatibility
 
                 default:
                     throw new NotSupportedException("The installed XNA Framework version can only be checked on Windows.");

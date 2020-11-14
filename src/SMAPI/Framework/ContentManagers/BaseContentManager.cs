@@ -119,7 +119,9 @@ namespace StardewModdingAPI.Framework.ContentManagers
         /// <typeparam name="T">The type of asset to load.</typeparam>
         /// <param name="assetName">The asset path relative to the loader root directory, not including the <c>.xnb</c> extension.</param>
         [Obsolete("This method is implemented for the base game and should not be used directly. To load an asset from the underlying content manager directly, use " + nameof(BaseContentManager.RawLoad) + " instead.")]
+#pragma warning disable CS0809 // Obsolete member overrides non-obsolete member
         public override T LoadBase<T>(string assetName)
+#pragma warning restore CS0809 // Obsolete member overrides non-obsolete member
         {
             return this.Load<T>(assetName, LanguageCode.en, useCache: true);
         }

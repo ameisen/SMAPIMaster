@@ -54,8 +54,9 @@ namespace StardewModdingAPI.ModBuildConfig.Analyzer
 
         /// <summary>Called once at session start to register actions in the analysis context.</summary>
         /// <param name="context">The analysis context.</param>
-        public override void Initialize(AnalysisContext context)
-        {
+        public override void Initialize(AnalysisContext context) {
+            context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.Analyze | GeneratedCodeAnalysisFlags.ReportDiagnostics);
+            context.EnableConcurrentExecution();
             context.RegisterSyntaxNodeAction(
                 this.AnalyzeObsoleteFields,
                 SyntaxKind.SimpleMemberAccessExpression,

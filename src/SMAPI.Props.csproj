@@ -1,0 +1,48 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	
+		<ForceMonoGame>false</ForceMonoGame>
+		<Force64Bit>false</Force64Bit>
+		<ForceAnyCPU>false</ForceAnyCPU>
+		
+		<UtilityFramework>net5.0</UtilityFramework>
+		<LibraryFramework>net4.8</LibraryFramework>
+		<ExecutableFramework>net4.8</ExecutableFramework>
+		<LangVersion>preview</LangVersion>
+		
+		<GameTarget>x86</GameTarget>
+		<GameTarget Condition="'$(Force64Bit)' == 'true'">x64</GameTarget>
+		<GameTarget Condition="'$(ForceAnyCPU)' == 'true'">AnyCPU</GameTarget>
+		<UtilityTarget>AnyCPU</UtilityTarget>
+		
+		<DebugSymbolsTypeFramework>pdbonly</DebugSymbolsTypeFramework>
+		<DebugSymbolsTypeUtility>portable</DebugSymbolsTypeUtility>
+		
+		<!-- BaseIntermediateOutputPath -->
+		<!--
+		<RootIntermediateOutputPath>$(SolutionDir)..\.intermediate\</RootIntermediateOutputPath>
+		<IntermediateOutputPath>$(RootIntermediateOutputPath)$(MSBuildProjectName)\$(Configuration)\$(LibraryFramework)\</IntermediateOutputPath>
+		<MSBuildProjectExtensionsPath>$(RootIntermediateOutputPath)$(MSBuildProjectName)</MSBuildProjectExtensionsPath>
+		-->
+		
+		<!--
+		<PlatformTarget Condition="'$(OS)' == 'Windows_NT' And '$(Force64Bit)' != 'true'">x86</PlatformTarget>
+		<PlatformTarget Condition="'$(OS)' == 'Windows_NT' And '$(Force64Bit)' == 'true'">AnyCPU</PlatformTarget>
+		<PlatformTarget Condition="'$(OS)' != 'Windows_NT'">AnyCPU</PlatformTarget>
+		-->
+		
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<OutRootDir>$(SolutionDir)..\.out\</OutRootDir>
+		
+		<LargeAddressAware Condition="'$(OS)' == 'Windows_NT'">true</LargeAddressAware>
+		
+		<NoWarn>1416;0436;0419;1591;1574</NoWarn>
+	</PropertyGroup>
+	
+	<ItemGroup>
+    <PackageReference Include="LargeAddressAware" Version="1.0.5" Conditon="'$(OutputType)' == 'Exe' AND '$(OS)' == 'Windows_NT'" />
+	</ItemGroup>
+
+</Project>

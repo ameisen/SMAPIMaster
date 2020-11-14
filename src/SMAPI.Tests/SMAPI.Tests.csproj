@@ -1,12 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\SMAPI.Props.csproj" />
 
   <PropertyGroup>
     <AssemblyName>SMAPI.Tests</AssemblyName>
     <RootNamespace>SMAPI.Tests</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
+		<TargetFramework>$(LibraryFramework)</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <LangVersion>latest</LangVersion>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>$(GameTarget)</PlatformTarget>
+		
+		<OutputPath>$(OutRootDir)$(MSBuildProjectName)\$(Configuration)\$(TargetFramework)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.14.6" />
+    <PackageReference Include="Moq" Version="4.15.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NUnit" Version="3.12.0" />
   </ItemGroup>

@@ -9,7 +9,7 @@
   **********************************************-->
   <PropertyGroup>
     <!-- include PDB file by default to enable line numbers in stack traces -->
-    <DebugType>pdbonly</DebugType>
+    <DebugType>$(DebugSymbolsTypeFramework)</DebugType>
     <DebugSymbols>true</DebugSymbols>
 
     <!-- recognise XNA Framework DLLs in the GAC (only affects mods using new csproj format) -->

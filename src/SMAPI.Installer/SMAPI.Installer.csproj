@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\SMAPI.Props.csproj" />
+
   <PropertyGroup>
     <RootNamespace>StardewModdingAPI.Installer</RootNamespace>
     <Description>The SMAPI installer for players.</Description>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>$(ExecutableFramework)</TargetFramework>
     <OutputType>Exe</OutputType>
-    <PlatformTarget>x86</PlatformTarget>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <PlatformTarget>$(GameTarget)</PlatformTarget>
+		
+		<OutputPath>$(OutRootDir)$(MSBuildProjectName)\$(Configuration)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

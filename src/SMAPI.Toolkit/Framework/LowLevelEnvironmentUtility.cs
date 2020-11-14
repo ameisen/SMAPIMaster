@@ -55,8 +55,8 @@ namespace StardewModdingAPI.Toolkit.Framework
         public static string GetFriendlyPlatformName(string platform)
         {
 #if SMAPI_FOR_WINDOWS
-            try
-            {
+#pragma warning disable CA1416
+            try {
                 return new ManagementObjectSearcher("SELECT Caption FROM Win32_OperatingSystem")
                     .Get()
                     .Cast<ManagementObject>()
@@ -64,6 +64,7 @@ namespace StardewModdingAPI.Toolkit.Framework
                     .FirstOrDefault();
             }
             catch { }
+#pragma warning restore CA1416
 #endif
 
             string name = Environment.OSVersion.ToString();

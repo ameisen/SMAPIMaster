@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Threading;
 using StardewModdingAPI.Framework;
 
@@ -16,6 +17,45 @@ namespace StardewModdingAPI
         /// <summary>The absolute path to search for SMAPI's internal DLLs.</summary>
         internal static readonly string DllSearchPath = EarlyConstants.InternalFilesPath;
 
+        private class EnvironmentInfo {
+            public readonly Version CLRVersion;
+            public readonly string RuntimeVersion;
+            public readonly int Bits;
+
+            public class FrameworkInfo {
+                public enum FrameworkType {
+                    XNA,
+                    MonoGame
+                }
+
+                public readonly FrameworkType Type;
+                public readonly Version Version;
+                public readonly string Name;
+
+                internal FrameworkInfo() {
+                    Assembly xnaAssembly = typeof(Microsoft.Xna.Framework.Vector2).Assembly;
+                    AssemblyName xnaAssemblyName = xnaAssembly.GetName();
+                    this.Version = xnaAssemblyName.Version;
+                    this.Name = xnaAssemblyName.Name;
+
+                    Type monoType = Assembly.GetEntryAssembly().GetType("MonoGame.Framework.Utilities.PlatformInfo");
+                    this.Type = (monoType == null) ? FrameworkType.XNA : FrameworkType.MonoGame;
+                }
+            }
+            public readonly FrameworkInfo Framework = new FrameworkInfo();
+
+            public EnvironmentInfo() {
+                this.CLRVersion = Environment.Version;
+
+                // https://weblog.west-wind.com/posts/2018/Apr/12/Getting-the-NET-Core-Runtime-Version-in-a-Running-Application
+                this.RuntimeVersion = Assembly
+                    .GetEntryAssembly()?
+                    .GetCustomAttribute<TargetFrameworkAttribute>()?
+                    .FrameworkName;
+
+                this.Bits = Environment.Is64BitProcess ? 64 : 32;
+            }
+        }
 
         /*********
         ** Public methods
@@ -24,6 +64,19 @@ namespace StardewModdingAPI
         /// <param name="args">The command-line arguments.</param>
         public static void Main(string[] args)
         {
+            EnvironmentInfo envInfo = new EnvironmentInfo();
+
+            Console.WriteLine(new string('*', 80));
+            Console.WriteLine($"Environment");
+            Console.WriteLine($"    Version: {envInfo.CLRVersion}");
+            Console.WriteLine($"   Manifest: {envInfo.RuntimeVersion}");
+            Console.WriteLine($"       Bits: {envInfo.Bits}");
+            Console.WriteLine($"Framework");
+            Console.WriteLine($"      Type: {envInfo.Framework.Type}");
+            Console.WriteLine($"   Version: {envInfo.Framework.Version}");
+            Console.WriteLine($"      Name: {envInfo.Framework.Name}");
+            Console.WriteLine(new string('*', 80));
+
             try
             {
                 AppDomain.CurrentDomain.AssemblyResolve += Program.CurrentDomain_AssemblyResolve;

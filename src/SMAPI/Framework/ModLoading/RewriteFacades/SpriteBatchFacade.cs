@@ -21,7 +21,11 @@ namespace StardewModdingAPI.Framework.ModLoading.RewriteFacades
         /****
         ** MonoGame signatures
         ****/
+#pragma warning disable CS0109 // Member does not hide an inherited member; new keyword is not required
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
         public new void Begin(SpriteSortMode sortMode, BlendState blendState, SamplerState samplerState, DepthStencilState depthStencilState, RasterizerState rasterizerState, Effect effect, Matrix? matrix)
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning restore CS0109 // Member does not hide an inherited member; new keyword is not required
         {
             base.Begin(sortMode, blendState, samplerState, depthStencilState, rasterizerState, effect, matrix ?? Matrix.Identity);
         }

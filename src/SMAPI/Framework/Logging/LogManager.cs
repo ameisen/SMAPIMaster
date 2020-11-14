@@ -155,7 +155,18 @@ namespace StardewModdingAPI.Framework.Logging
             while (continueWhile())
                 Thread.Sleep(1000 / 10);
             if (inputThread.ThreadState == ThreadState.Running)
+#if NETFRAMEWORK 
                 inputThread.Abort();
+#else
+				// Thread.Abort is unsupported in .NET Core/Standard, and doesn't work. Throw the exception explicitly.
+				throw (ThreadAbortException)typeof(ThreadAbortException)
+					.GetConstructor(
+						System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic,
+						null,
+						Type.EmptyTypes,
+						null
+					).Invoke(null);
+#endif
         }
 
         /// <summary>Show a 'press any key to exit' message, and exit when they press a key.</summary>

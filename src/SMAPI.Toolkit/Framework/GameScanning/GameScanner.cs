@@ -139,6 +139,7 @@ namespace StardewModdingAPI.Toolkit.Framework.GameScanning
         }
 
 #if SMAPI_FOR_WINDOWS
+#pragma warning disable CA1416
         /// <summary>Get the value of a key in the Windows HKLM registry.</summary>
         /// <param name="key">The full path of the registry key relative to HKLM.</param>
         /// <param name="name">The name of the value.</param>
@@ -164,6 +165,7 @@ namespace StardewModdingAPI.Toolkit.Framework.GameScanning
             using (openKey)
                 return (string)openKey.GetValue(name);
         }
+#pragma warning disable CA1416
 #endif
     }
 }

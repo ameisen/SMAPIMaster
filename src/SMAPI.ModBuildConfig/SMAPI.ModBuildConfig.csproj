@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\SMAPI.Props.csproj" />
+
   <PropertyGroup>
     <!--build-->
     <RootNamespace>StardewModdingAPI.ModBuildConfig</RootNamespace>
-    <TargetFramework>net45</TargetFramework>
-    <PlatformTarget>x86</PlatformTarget>
-    <LangVersion>latest</LangVersion>
+    <TargetFramework>$(LibraryFramework)</TargetFramework>
+    <PlatformTarget>$(GameTarget)</PlatformTarget>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <!--NuGet package-->
@@ -21,18 +22,19 @@
       - Added SMAPI-ModTranslationClassBuilder files to the ignore list.
     </PackageReleaseNotes>
     <IncludeBuildOutput>false</IncludeBuildOutput>
+		
+		<OutputPath>$(OutRootDir)$(MSBuildProjectName)\$(Configuration)\$(TargetFramework)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Web.Extensions" />
+    <ProjectReference Include="..\SMAPI.Toolkit\SMAPI.Toolkit.csproj" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SMAPI.Toolkit\SMAPI.Toolkit.csproj" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Build" Version="16.8.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +42,7 @@
     <None Include="..\..\docs\technical\mod-package.md" Link="mod-package.md" />
 
     <!--NuGet package files-->
-    <None PackagePath="analyzers/dotnet/cs" Include="$(SolutionDir)/SMAPI.ModBuildConfig.Analyzer/bin/netstandard2.0/SMAPI.ModBuildConfig.Analyzer.dll" Pack="true" Visible="false" />
+    <None PackagePath="analyzers/dotnet/cs" Include="$(OutRootDir)/SMAPI.ModBuildConfig.Analyzer/$(Configuration)/$(UtilityFramework)/SMAPI.ModBuildConfig.Analyzer.dll" Pack="true" Visible="false" />
     <None PackagePath="build/" Include="..\..\build\find-game-folder.targets" Link="build/find-game-folder.targets" Pack="true" />
     <None PackagePath="build/" Include="$(OutputPath)\Newtonsoft.Json.dll" Pack="true" Visible="false" />
     <None PackagePath="build/" Include="$(OutputPath)\SMAPI.Toolkit.dll" Pack="true" Visible="false" />

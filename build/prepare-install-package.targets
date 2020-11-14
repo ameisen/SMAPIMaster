@@ -1,4 +1,10 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<!-- https://stackoverflow.com/a/41589480 -->
+		<TasksAssemblyName>Microsoft.Build.Tasks.v$(MSBuildToolsVersion)</TasksAssemblyName>
+		<TasksAssemblyName Condition="'$(MSBuildToolsVersion)' == 'Current' OR $([System.Double]::Parse($(MSBuildToolsVersion))) >= 14.0">Microsoft.Build.Tasks.Core</TasksAssemblyName>
+	</PropertyGroup>
+
   <!--
 
   This build task is run from the installer project after all projects have been compiled, and
@@ -6,21 +12,28 @@
 
   -->
   <Target Name="PrepareInstaller" AfterTargets="AfterBuild">
+		<!-- MSBuild gets a bit wonky in vs2019+ -->	
     <PropertyGroup>
-      <PlatformName>windows</PlatformName>
-      <PlatformName Condition="$(OS) != 'Windows_NT'">unix</PlatformName>
+			<InvariantGlobalization>true</InvariantGlobalization>
 
-      <BuildRootPath>$(SolutionDir)</BuildRootPath>
+			<PlatformName>unknown</PlatformName>
+			<PlatformName Condition="'$(OS)' == 'Windows_NT'">windows</PlatformName>
+			<PlatformName Condition="'$(OS)' != 'Windows_NT'">unix</PlatformName>
+		
+			<!--<OutputPath>$(OutRootDir)$(MSBuildProjectName)\$(Configuration)\$(TargetFramework)\</OutputPath>-->
+		
+      <BuildRootPath>$(OutRootDir)</BuildRootPath>
       <OutRootPath>$(SolutionDir)\..\bin</OutRootPath>
 
-      <SmapiBin>$(BuildRootPath)\SMAPI\bin\$(Configuration)</SmapiBin>
-      <ToolkitBin>$(BuildRootPath)\SMAPI.Toolkit\bin\$(Configuration)\net4.5</ToolkitBin>
-      <ConsoleCommandsBin>$(BuildRootPath)\SMAPI.Mods.ConsoleCommands\bin\$(Configuration)</ConsoleCommandsBin>
-      <SaveBackupBin>$(BuildRootPath)\SMAPI.Mods.SaveBackup\bin\$(Configuration)</SaveBackupBin>
+      <SmapiBin>$(BuildRootPath)\SMAPI\$(Configuration)</SmapiBin>
+      <ToolkitBin>$(BuildRootPath)\SMAPI.Toolkit\$(Configuration)\$(LibraryFramework)</ToolkitBin>
+      <ConsoleCommandsBin>$(BuildRootPath)\SMAPI.Mods.ConsoleCommands\$(Configuration)</ConsoleCommandsBin>
+      <SaveBackupBin>$(BuildRootPath)\SMAPI.Mods.SaveBackup\$(Configuration)</SaveBackupBin>
 
       <PackagePath>$(OutRootPath)\SMAPI installer</PackagePath>
       <PackageDevPath>$(OutRootPath)\SMAPI installer for developers</PackageDevPath>
     </PropertyGroup>
+		
     <ItemGroup>
       <TranslationFiles Include="$(SmapiBin)\i18n\*.json" />
     </ItemGroup>
@@ -91,7 +104,7 @@
   </Target>
 
   <!-- Create a zip file with the contents of a given folder path. Derived from https://stackoverflow.com/a/38127938/262123. -->
-  <UsingTask TaskName="ZipDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v12.0.dll">
+  <UsingTask TaskName="ZipDirectory" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\$(TasksAssemblyName).dll">
     <ParameterGroup>
       <FromDirPath ParameterType="System.String" Required="true" />
       <ToFilePath ParameterType="System.String" Required="true" />
@@ -103,7 +116,7 @@
         <![CDATA[
         try
         {
-          ZipFile.CreateFromDirectory(FromDirPath, ToFilePath);
+          ZipFile.CreateFromDirectory(FromDirPath, ToFilePath, CompressionLevel.Optimal, false);
           return true;
         }
         catch(Exception ex)
@@ -117,7 +130,7 @@
   </UsingTask>
 
   <!-- Replace text in a file based on a regex pattern. Derived from https://stackoverflow.com/a/22571621/262123. -->
-  <UsingTask TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+  <UsingTask TaskName="ReplaceFileText" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\$(TasksAssemblyName).dll">
     <ParameterGroup>
       <FilePath ParameterType="System.String" Required="true" />
       <Search ParameterType="System.String" Required="true" />

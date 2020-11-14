@@ -1,0 +1,39 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<XNAFrameworkRootPath>$(WINDIR)\Microsoft.NET\assembly\GAC_32\</XNAFrameworkRootPath>
+		<XNAFrameworkVersionPath>\v4.0_4.0.0.0__842cf8be1de50553\</XNAFrameworkVersionPath>
+		<XNAFrameworkPath>$(XNAFrameworkRootPath)Microsoft.Xna.Framework$(XNAFrameworkVersionPath)</XNAFrameworkPath>
+		<XNAFrameworkGamePath>$(XNAFrameworkRootPath)Microsoft.Xna.Framework.Game$(XNAFrameworkVersionPath)</XNAFrameworkGamePath>
+		<XNAFrameworkGraphicsPath>$(XNAFrameworkRootPath)Microsoft.Xna.Framework.Graphics$(XNAFrameworkVersionPath)</XNAFrameworkGraphicsPath>
+		<XNAFrameworkXactPath>$(XNAFrameworkRootPath)Microsoft.Xna.Framework.Xact$(XNAFrameworkVersionPath)</XNAFrameworkXactPath>
+	</PropertyGroup>
+
+  <Choose>
+    <!-- Windows -->
+    <When Condition="'$(OS)' == 'Windows_NT' And '$(ForceMonoGame)' != 'true'">
+      <ItemGroup>
+        <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkPath)Microsoft.Xna.Framework.dll" Private="False" />
+        <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkGamePath)Microsoft.Xna.Framework.Game.dll" Private="False" />
+        <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkGraphicsPath)Microsoft.Xna.Framework.Graphics.dll" Private="False" />
+        <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkXactPath)Microsoft.Xna.Framework.Xact.dll" Private="False" />
+				
+				<!--
+        <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkPath)Microsoft.Xna.Framework.dll" Private="False" />
+        <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkPath)Microsoft.Xna.Framework.Game.dll" Private="False" />
+        <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkPath)Microsoft.Xna.Framework.Graphics.dll" Private="False" />
+        <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkPath)Microsoft.Xna.Framework.Xact.dll" Private="False" />
+				-->
+				
+				<!--<Reference Include="Microsoft.Xna.Framework.Math, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" HintPath="$(XNAFrameworkPath)\MonoGame.Framework.dll" Private="False" />-->
+      </ItemGroup>
+    </When>
+
+    <!-- Linux/Mac -->
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="MonoGame.Framework" HintPath="$(GamePath)\MonoGame.Framework.dll" Private="False" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+
+</Project>

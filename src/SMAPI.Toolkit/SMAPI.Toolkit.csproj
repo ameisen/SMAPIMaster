@@ -1,18 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="..\SMAPI.Props.csproj" />
+
   <PropertyGroup>
     <RootNamespace>StardewModdingAPI.Toolkit</RootNamespace>
     <Description>A library which encapsulates mod-handling logic for mod managers and tools. Not intended for use by mods.</Description>
-    <TargetFrameworks>net4.5;netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PlatformTarget Condition="'$(TargetFramework)' == 'net4.5'">x86</PlatformTarget>
+		
+    <TargetFrameworks>$(LibraryFramework);$(UtilityFramework)</TargetFrameworks>
+		<PlatformTarget>$(UtilityTarget)</PlatformTarget>
+		<PlatformTarget Condition="'$(TargetFramework)' == '$(LibraryFramework)'">$(GameTarget)</PlatformTarget>
+		
+		<OutputPath>$(OutRootDir)$(MSBuildProjectName)\$(Configuration)\$(TargetFramework)\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.24" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.28" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Pathoschild.Http.FluentClient" Version="4.0.0" />
-    <PackageReference Include="System.Management" Version="4.5.0" Condition="'$(OS)' == 'Windows_NT'" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" Condition="'$(OS)' == 'Windows_NT' AND '$(TargetFramework)' == 'netstandard2.0'" />
+    <PackageReference Include="System.Management" Version="5.0.0" Condition="'$(OS)' == 'Windows_NT'" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" Condition="'$(OS)' == 'Windows_NT' AND '$(TargetFramework)' == '$(UtilityFramework)'" />
   </ItemGroup>
 
   <ItemGroup>
